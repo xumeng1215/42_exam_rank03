@@ -23,6 +23,8 @@ int ft_put_str(char *str)
     return i;
 }
 
+//output integer
+//need to consider the int range
 int ft_put_int(int num)
 {
     int i = 0;
@@ -39,7 +41,24 @@ int ft_put_int(int num)
     else
     {
         i += ft_put_int(num / 10);
-        i += put_char(num % 10);
+        i += put_char(num % 10 + '0');
+    }
+    return i;
+}
+
+//output number in hex format
+//taking unsigned int, otherwise won't work
+int ft_put_hex(unsigned int num)
+{
+    int i = 0;
+    char set[16] = "0123456789abcdef";
+
+    if (num < 16)
+        i += put_char(set[num]);
+    else
+    {
+        i += ft_put_hex(num / 16);
+        i += put_char(set[num % 16]);
     }
     return i;
 }
@@ -48,13 +67,13 @@ int ft_put_int(int num)
 int ft_put_args(va_list args, char c)
 {
     if (c == '%')
-        return put_char('%');
+        return (put_char('%'));
     else if (c == 's')
-        return ft_put_str(va_arg(args, char *));
+        return (ft_put_str(va_arg(args, char *)));
     else if (c == 'd')
-        return ft_put_int(va_arg(args, int));
+        return (ft_put_int(va_arg(args, int)));
     else if (c == 'x')
-        return ft_put_hex(va_arg(args, unsigned int));
+        return (ft_put_hex(va_arg(args, unsigned int)));
     else
         return -1;
 }
@@ -82,6 +101,19 @@ int ft_printf(char *str, ...)
 
 int main(void)
 {
-    int i = 5;
-    ft_printf("int i is %d\n", i);
+    int i = 2147483647;
+    int a, b;
+    char *s = "hello";
+
+    a = ft_printf("%s\n", s);
+    b = printf("%s\n", s);
+    printf("a %d, b %d\n", a, b);
+
+    a = ft_printf("%d\n", i);
+    b = printf("%d\n", i);
+    printf("a %d, b %d\n", a, b);
+
+    a = ft_printf("%x\n", i);
+    b = printf("%x\n", i);
+    printf("a %d, b %d\n", a, b);
 }
